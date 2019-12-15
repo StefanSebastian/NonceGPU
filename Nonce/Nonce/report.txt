@@ -48,3 +48,7 @@ name=gpu input=abcdef pattern=1 iterations=30 threads_per_block=64 min=157642720
 name=gpu input=abcdef pattern=1 iterations=30 threads_per_block=64 min=1576427239.00 max=1576427241.00 mean=1576427241.00 avg=1576427240.80 stdev=0.60
 name=gpu input=abcdef pattern=1 iterations=30 threads_per_block=64 min=1576427259.00 max=1576427261.00 mean=1576427261.00 avg=1576427260.70 stdev=0.64
 name=gpu input=abcdef pattern=1 iterations=30 threads_per_block=64 min=1576427272.00 max=1576427272.00 mean=1576427272.00 avg=1576427272.00 stdev=0.00
+name=gpu input=abcdef pattern=1 iterations=30 threads_per_block=64 min=1576435506.00 max=1576435508.00 mean=1576435508.00 avg=1576435507.40 stdev=0.80
+name=gpu input=abcdef pattern=1 iterations=30 threads_per_block=64 min=1576435668.00 max=1576435670.00 mean=1576435669.00 avg=1576435668.90 stdev=0.54
+name=gpu input=abcdef pattern=1 iterations=30 threads_per_block=64 min=1576435685.00 max=1576435688.00 mean=1576435687.00 avg=1576435687.00 stdev=0.89
+name=gpu input=abcdef pattern=1 iterations=30 threads_per_block=64 min=1576435712.00 max=1576435714.00 mean=1576435714.00 avg=1576435713.60 stdev=0.80
