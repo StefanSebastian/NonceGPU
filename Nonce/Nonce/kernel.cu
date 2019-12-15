@@ -231,8 +231,7 @@ __device__ int get_random_char(curandState* state) {
 __device__ int check_str(char* str, char* pattern) {
 	uint8_t digest[20]; char hexdigest[41];
 	sha1digest(digest, hexdigest, (uint8_t*)str, str_len(str));
-	return string_ends_with(str, pattern);
-	return 1;
+	return string_ends_with(hexdigest, pattern);
 }
 
 __global__ void nonceKernel(char* d_str, char* d_pattern, char* d_result, int* found, int* maxiter, char* d_strings, curandState* state, int pitch) {
@@ -258,10 +257,6 @@ __global__ void nonceKernel(char* d_str, char* d_pattern, char* d_result, int* f
 			*found = 1;
 			copy_str(d_result, new_str);
 		}
-	}
-
-	if (idx == 1) {
-		copy_str(d_result, new_str);
 	}
 }
 
