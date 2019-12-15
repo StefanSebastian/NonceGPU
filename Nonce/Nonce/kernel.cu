@@ -253,7 +253,7 @@ __global__ void nonceKernel(char* d_str, char* d_pattern, char* d_result, int* f
 		new_sz++;
 		new_str[new_sz] = '\0';
 
-		if (check_str(new_str, d_pattern)) {
+		if (check_str(new_str, d_pattern) && *found == 0) {
 			*found = 1;
 			copy_str(d_result, new_str);
 		}
@@ -407,7 +407,7 @@ int main()
 		do_iteration();
 
 		ftime(&end);
-		times[r] = end.time = start.time + ((double)end.millitm - (double)start.millitm) / 1000.0;
+		times[r] = end.time - start.time + ((double)end.millitm - (double)start.millitm) / 1000.0;
 		progress("gpu", r, times[r]);
 	}
 

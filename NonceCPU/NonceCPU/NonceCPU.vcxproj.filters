@@ -29,9 +29,6 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\..\mandelbrot\main.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\mandelbrot\tinycthread.c">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -39,6 +36,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="sha1.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\mandelbrot\main.c">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
