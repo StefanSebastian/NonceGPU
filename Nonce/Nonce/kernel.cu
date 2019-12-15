@@ -42,17 +42,17 @@ __device__ int get_random_char(curandState* state) {
 	int myrand = (int)truncf(myrandf);
 }
 
-__global__ void nonceKernel(char* d_str, char* d_pattern, char* d_result, int* found, int* maxiter, char* d_strings, curandState* state) {
+__global__ void nonceKernel(char* d_str, char* d_pattern, char* d_result, int* found, int* maxiter, char* d_strings, curandState* state, int pitch) {
 	if (*found == 1) {
 		return;
 	}
 
 	int idx = threadIdx.x + blockIdx.x * blockDim.x;
-	char* new_str = d_strings + idx * *maxiter;
+	char* new_str = d_strings + idx * pitch;
 	copy_str(new_str, d_str);
 	int new_sz = str_len(new_str);
 
-	for (int i = 0; i < *maxiter; i++) {
+	while (new_sz < *maxiter - 1) {
 		if (*found == 1) {
 			break;
 		}
@@ -62,11 +62,8 @@ __global__ void nonceKernel(char* d_str, char* d_pattern, char* d_result, int* f
 		new_str[new_sz] = '\0';
 	}
 
-	//copy_str(d_result, new_str);
 	if (idx == 1) {
-		for (int i = *maxiter; i < *maxiter * 2; i++) {
-			d_result[i] = d_strings[i];
-		}
+		copy_str(d_result, new_str);
 	}
 }
 
@@ -83,6 +80,7 @@ cudaError_t do_iteration() {
 	int* d_found;
 	int* d_maxiter;
 	char* d_strings;
+	size_t pitch;
 	curandState *d_state;
 	cudaError_t cudaStatus;
 
@@ -129,7 +127,7 @@ cudaError_t do_iteration() {
 		goto Error;
 	}
 
-	cudaStatus = cudaMalloc((void **)&d_strings, (BLOCKS * THREADS_PER_BLOCK * MAX_ITERATION + 1) * sizeof(char));
+	cudaStatus = cudaMallocPitch((void **)&d_strings, &pitch, (MAX_ITERATION + 1) * sizeof(char), BLOCKS * THREADS_PER_BLOCK);
 	if (cudaStatus != cudaSuccess) {
 		fprintf(stderr, "cudaMalloc failed!");
 		goto Error;
@@ -170,7 +168,7 @@ cudaError_t do_iteration() {
 
 	// launch kernel 
 	setup_kernel << <BLOCKS, THREADS_PER_BLOCK >> > (d_state);
-	nonceKernel << < BLOCKS, THREADS_PER_BLOCK >> > (d_input, d_pattern, d_result, d_found, d_maxiter, d_strings, d_state);
+	nonceKernel << < BLOCKS, THREADS_PER_BLOCK >> > (d_input, d_pattern, d_result, d_found, d_maxiter, d_strings, d_state, pitch);
 	cudaStatus = cudaGetLastError();
 	if (cudaStatus != cudaSuccess) {
 		fprintf(stderr, "fractalKernel launch failed: %s\n", cudaGetErrorString(cudaStatus));
